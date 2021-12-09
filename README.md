@@ -9,15 +9,13 @@
 
 #### 安装教程
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+1.  cnpm install
+
 
 #### 使用说明
 
 1.  命令行运行 npm run dev
-2.  xxxx
-3.  xxxx
+
 
 #### 参与贡献
 
