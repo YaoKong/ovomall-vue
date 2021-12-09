@@ -1,7 +1,5 @@
 <template>
-    <NavBar id = "nav"> </NavBar>
     <div class="container">
-
         <div id="login">
             <h2>登录</h2>
             <hr>
@@ -94,7 +92,6 @@
                 </table>
         </div>
     </div>
-    <Footer></Footer>
 </template>
 
 <script>
@@ -146,11 +143,13 @@
                         });
                 }
             }
-        }
+        },
+        beforeCreate() {
+        },
     }
 </script>
 
-<style >
+<style>
     .container {
         float: right;
     }
@@ -197,7 +196,6 @@
     }
 
     body {
-        background-color: WhiteSmoke;
         background-image: url(../assets/background.jpg)
     }
 

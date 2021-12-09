@@ -12,11 +12,13 @@
 
 <style scoped>
     #footer {
-        position: absolute;
+        position: fixed;
+        margin-top: 20px;
         bottom: 0;
         text-align: center;
         width: 99%;
         background-color: #b4b4b4;
         clear:both;
+
     }
 </style>

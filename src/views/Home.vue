@@ -1,10 +1,7 @@
 <template>
     <div>
-        <NavBar id = "nav"> </NavBar>
     <p>home.vue</p>
     </div>
-
-    <Footer></Footer>
 </template>
 
 <script>

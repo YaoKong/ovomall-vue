@@ -1,16 +1,17 @@
 <template>
-  <p>APP.vue</p>
-  <span>  <router-link to="/home">home  </router-link> <router-link to="/login">登录/注册</router-link></span>
-
-  <router-view></router-view>
+  <NavBar></NavBar>
+  <Footer></Footer>
 </template>
 
 <script>
+  import NavBar from "./components/NavBar.vue";
+  import Footer from "./components/footer.vue"
   export default {
     name: 'App',
-    // components:{
-    //   HelloWorld
-    // }
+    components:{
+      NavBar,
+      Footer
+    }
   }
 
 </script>
@@ -21,5 +22,8 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+  body{
+    background-color: whitesmoke;
+  }
 
 </style>

@@ -23,6 +23,14 @@ const router = createRouter({
                 index: 1
             }
         },
+        {
+            path: '/shoppingCart',
+            name: 'cart',
+            component: () => import(/* webpackChunkName: "login" */ './views/ShoppingCart.vue'),
+            meta: {
+                index: 1
+            }
+        },
 
     ]
 })
