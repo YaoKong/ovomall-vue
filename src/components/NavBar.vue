@@ -9,11 +9,29 @@
             </el-col>
 
             <el-col :span="2" :offset="16">
-                <router-link to="/login">
-                <el-menu-item index="2">
-                    <img src="../assets/personalCenter.png" alt="sada" height="25" weight="25">登录/注册
-                </el-menu-item>
-                </router-link>
+                <template v-if="isAuth">
+                    <router-link to="/profile">
+                        <el-sub-menu index="2">
+                            <template #title>个人中心</template>
+                            <el-menu-item index="2">
+                                <img src="../assets/personalCenter.png" alt="sada" height="25" weight="25">此处为用户名
+                            </el-menu-item>
+                            <el-menu-item index="3" @click="logout">
+                                退出登录
+                            </el-menu-item>
+                        </el-sub-menu>
+
+                    </router-link>
+                </template>
+                <template v-else>
+                    <router-link to="/login">
+                        <el-menu-item index="2">
+                            <img src="../assets/personalCenter.png" alt="sada" height="25" weight="25">登录/注册
+                        </el-menu-item>
+                    </router-link>
+                </template>
+
+
             </el-col>
             <el-col :span="2" >
             <el-menu-item index="4" id = "helper">客服中心</el-menu-item>
@@ -32,16 +50,25 @@
 </template>
 
 <script>
+    import store from "../store";
+
     export default {
         name: "NavBar",
         data() {
             return {
                 activeName: 'first',
+                isAuth: store.state.isAuth,
             }
         },
         methods: {
             handleClick(tab, event) {
                 console.log(tab, event)
+            },
+            logout(){   //将flag从本地移除
+                // store.state.isAuth = false;
+                localStorage.removeItem("Auth");
+                alert("登出成功，即将跳转")
+                this.$router.push("/home");
             },
         },
     }

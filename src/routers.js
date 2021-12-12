@@ -20,7 +20,7 @@ const router = createRouter({
             name: 'login',
             component: () => import(/* webpackChunkName: "login" */ './views/Login.vue'),
             meta: {
-                index: 1
+                index: 2
             }
         },
         {
@@ -28,7 +28,16 @@ const router = createRouter({
             name: 'cart',
             component: () => import(/* webpackChunkName: "login" */ './views/ShoppingCart.vue'),
             meta: {
-                index: 1
+                index: 3,
+
+            }
+        },
+        {
+            path: '/profile',
+            name: 'profile',
+            component: () => import(/* webpackChunkName: "login" */ './views/Profile.vue'),
+            meta: {
+                requireAuth: true
             }
         },
 

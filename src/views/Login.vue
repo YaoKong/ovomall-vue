@@ -97,6 +97,7 @@
 <script>
     import NavBar from '../components/NavBar.vue'
     import Footer from '../components/footer.vue'
+    import store from "../store";
     export default {
         name: "LoginAndRegister",
         components: {
@@ -107,7 +108,8 @@
             return {
                 loginForm: {username: "", pwd: ""},
                 registerForm: {username: "", pwd: "", checkPwd: "", email: "", tel: ""},
-                info: null
+                info: null,
+
             }
         },
         methods: {
@@ -141,10 +143,26 @@
                         .catch(function (error) {
                             console.log(error);
                         });
+
+                    //处理响应
+                    if(this.info == "200"){ //登录成功
+                    // if(true){ //测试代码
+                        this.$store.dispatch("userLogin", true);    //设置登录标志位true
+
+                        localStorage.setItem("Auth","yes"); //设置item名为Auth，值为yes
+
+                        //提示登录成功，正在跳转
+                        alert("登录成功，即将跳转");
+                        this.$router.push("/home");
+                    }
+                    else{   //登录失败
+                        alert("登录失败，请稍后再试");
+                    }
                 }
             }
         },
         beforeCreate() {
+
         },
     }
 </script>
