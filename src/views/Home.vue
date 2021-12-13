@@ -6,7 +6,6 @@
         <!-- <input type="text" class="on" id="in" placeholder="请输入查询内容" /> -->
         <button class="btn_search" onclick="showInput()">搜索</button>
     </div>
-
     <div class="table" >
         <table class="table2" border="1" width="200" height="320" >
             <tr>
@@ -37,10 +36,8 @@
             <div class="re">
                 <ul>
                     <li>
-
                         <a href="https://www.iconfont.cn/collections/index?spm=a313x.7781069.1998910419.5&type=1" target="_blank">
                             <img width="100" height="100" src="../assets/图标/lenovo1.jpg" alt="">
-
                         </a>
                     </li>
                     <li><img width="100" height="100" src="../assets/图标/lenovo2.jpg" alt=""></li>
@@ -62,7 +59,6 @@
         <span class="recommended">推荐商品</span>
 
         <div class="c" >
-
             <a href="https://www.iconfont.cn/collections/index?spm=a313x.7781069.1998910419.5&type=1" target="_blank">
                 <img class="try" width="410" height="410" src="../assets/图标/lenovo2.jpg" alt="">
             </a>
