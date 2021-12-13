@@ -9,12 +9,12 @@
             </el-col>
 
             <el-col :span="2" :offset="16">
-                <template v-if="isAuth">
+                <template v-if="this.$store.state.isAuth">
                     <router-link to="/profile">
                         <el-sub-menu index="2">
                             <template #title>个人中心</template>
                             <el-menu-item index="2">
-                                <img src="../assets/personalCenter.png" alt="sada" height="25" weight="25">此处为用户名
+                                <img src="../assets/personalCenter.png" alt="sada" height="25" weight="25">此处为用户
                             </el-menu-item>
                             <el-menu-item index="3" @click="logout">
                                 退出登录
@@ -50,14 +50,12 @@
 </template>
 
 <script>
-    import store from "../store";
-
+    //
     export default {
         name: "NavBar",
         data() {
             return {
                 activeName: 'first',
-                isAuth: store.state.isAuth,
             }
         },
         methods: {
@@ -65,7 +63,7 @@
                 console.log(tab, event)
             },
             logout(){   //将flag从本地移除
-                // store.state.isAuth = false;
+                this.$store.dispatch("userLogin", false);
                 localStorage.removeItem("Auth");
                 alert("登出成功，即将跳转")
                 this.$router.push("/home");

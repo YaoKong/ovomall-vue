@@ -7,16 +7,19 @@ import store from './store'
 
 const app = createApp(App)
 
-app.use(store)
+
 router.beforeEach((to,from, next) =>{
 
     if(localStorage.getItem("Auth") == "yes"){  //设置获取item，并设置登录状态
         console.log(localStorage.getItem("Auth"));
+        // console.log(store.state.isAuth);
+        // store.dispatch("userLogin", true);
         store.state.isAuth = true;
+        // console.log(store.state.isAuth);
         next();
 
         //防止登录了还跳到登录页面
-        if(to.name = "login"){
+        if(to.name == "login"){
             next({path: '/home'});
         }
     }
@@ -31,8 +34,7 @@ router.beforeEach((to,from, next) =>{
     }
 })
 
-
-
+app.use(store)
 app.use(ElementPlus)
 app.use(router)
 app.mount('#app')

@@ -138,15 +138,15 @@
                 if (this.loginForm.username == "" || this.loginForm.pwd == "") {
                     alert("用户名或密码为空！");
                 } else {
-                    axios.post("/login", jsonForm)
-                        .then(response => (this.info = response))
-                        .catch(function (error) {
-                            console.log(error);
-                        });
+                    // axios.post("/login", jsonForm)
+                    //     .then(response => (this.info = response))
+                    //     .catch(function (error) {
+                    //         console.log(error);
+                    //     });
 
                     //处理响应
-                    if(this.info == "200"){ //登录成功
-                    // if(true){ //测试代码
+                    // if(this.info == "200"){ //登录成功
+                    if(true){ //测试代码
                         this.$store.dispatch("userLogin", true);    //设置登录标志位true
 
                         localStorage.setItem("Auth","yes"); //设置item名为Auth，值为yes
