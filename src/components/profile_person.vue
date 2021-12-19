@@ -12,7 +12,6 @@
     </div>
     <div class="column">
 
-
         <div class="leftcolumn">
             <img src="../assets/图标/icon.jpg" class="round_icon" alt="">
         </div>
@@ -20,27 +19,27 @@
             <table class="table1">
                 <tr>
                     <td>姓名：</td>
-                    <td>从后端获取</td>
+                    <td>{{this.$store.state.userInfo.username}}</td>
                 </tr>
                 <tr>
                     <td> ID：</td>
-                    <td>从后端获取</td>
+                    <td>{{this.$store.state.userInfo.id}}</td>
                 </tr>
                 <tr>
                     <td>性别：</td>
-                    <td>从后端获取</td>
+                    <td>{{this.$store.state.userInfo.sex}}</td>
                 </tr>
                 <tr>
                     <td>邮箱：</td>
-                    <td>从后端获取</td>
+                    <td>{{this.$store.state.userInfo.email}}</td>
                 </tr>
                 <tr>
                     <td>手机号：</td>
-                    <td>从后端获取</td>
+                    <td>{{this.$store.state.userInfo.tel}}</td>
                 </tr>
                 <tr>
                     <td>余额：</td>
-                    <td>从后端获取</td>
+                    <td>{{this.$store.state.userInfo.balance}}</td>
                 </tr>
             </table>
         </div>
@@ -67,6 +66,7 @@
                     </tr>
             </table>
         </div>
+
         <div class="rightfooter">
             <table width="300" cellspacing="8" frame="box" class="table3">
                     <tr>
@@ -96,10 +96,6 @@
 </script>
 
 <style scoped>
-    /*.footer{*/
-    /*    position: relative;*/
-    /*}*/
-
     .profile{
         position: relative;
         top: 0;

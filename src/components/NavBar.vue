@@ -14,7 +14,8 @@
                         <el-sub-menu index="2">
                             <template #title>个人中心</template>
                             <el-menu-item index="2">
-                                <img src="../assets/personalCenter.png" alt="sada" height="25" weight="25">此处为用户
+                                <img src="../assets/personalCenter.png" alt="sada" height="25" weight="25">
+                                {{this.$store.state.userInfo.username}}
                             </el-menu-item>
                             <el-menu-item index="3" @click="logout">
                                 退出登录
@@ -45,12 +46,9 @@
             </el-col>
     </el-menu>
     <div class="line"><router-view></router-view></div>
-
-
 </template>
 
 <script>
-    //
     export default {
         name: "NavBar",
         data() {

@@ -28,11 +28,10 @@
                         </td>
                         <td>
                             <input class="submitButton" type="submit" v-on:click="toLogin" value="登录"/>
-                            <a href="#findPassword" id="findPassword"> 找回密码</a>
+<!--                            <a href="#findPassword" id="findPassword"> 找回密码</a>-->
                         </td>
                     </tr>
                 </table>
-
         </div>
 
         <div id="register">
@@ -97,7 +96,8 @@
 <script>
     import NavBar from '../components/NavBar.vue'
     import Footer from '../components/footer.vue'
-    import store from "../store";
+    import Cookie from "js-cookie";
+    import Cookies from "js-cookie";
     export default {
         name: "LoginAndRegister",
         components: {
@@ -130,6 +130,13 @@
                         .catch(function (error) {
                             console.log(error);
                         });
+                    if(this.info == "200"){
+                        alert("注册成功，即将刷新");
+                        location.reload();
+                    }
+                    else{
+                        alert("注册失败，稍后再试");
+                    }
                 }
             },
             toLogin: function () {
@@ -139,32 +146,43 @@
                 if (this.loginForm.username == "" || this.loginForm.pwd == "") {
                     alert("用户名或密码为空！");
                 } else {
-                    axios.post("/login", jsonForm)
-                        .then(response => (this.info = response))
-                        .catch(function (error) {
-                            console.log(error);
-                        });
+                    // axios.post("/login", jsonForm)
+                    //     .then(response => (this.info = response))
+                    //     .catch(function (error) {
+                    //         console.log(error);
+                    //     });
 
                     //处理响应
-                    if(this.info == "200"){ //登录成功
-                    // if(true){ //测试代码
+                    // if(this.info == "200"){ //登录成功
+                    if(true){ //测试代码
                         this.$store.dispatch("userLogin", true);    //设置登录标志位true
 
                         localStorage.setItem("Auth","yes"); //设置item名为Auth，值为yes
 
-                        axios.post("/findUser", jsonForm)   //根据用户名和密码查找用户，响应包含用户的全部信息json对象
-                            .then(response => (this.user = response.data))
-                            .catch(function (error) {
-                                console.log(error);
-                            });
-                        if(this.user != null){
-                            console.log(this.user)
-                            this.$store.dispatch("createUser", this.user);
-                        }
+                        // axios.post("/findUser", jsonForm)   //根据用户名和密码查找用户，响应包含用户的全部信息json对象
+                        //     .then(response => (this.user = JSON.parse(response.data)))
+                        //     .catch(function (error) {
+                        //         console.log(error);
+                        //     });
+
+                        var uuser = {
+                            username: this.loginForm.username,
+                            pwd: this.loginForm.pwd,
+                            email: "asfasf@qq.com",
+                            tel: "10086",
+                            sex: "男",
+                            id: 100,
+                            imgURL: "../assets/图标/lenovo1.jpg",
+                            balance: 100,
+                        };
+
+                        this.$store.dispatch("createUser", uuser );
+
 
                         //提示登录成功，正在跳转
                         alert("登录成功，即将跳转");
                         this.$router.push("/home");
+                        // location.reload();
                     }
                     else{   //登录失败
                         alert("登录失败，请稍后再试");
@@ -178,7 +196,7 @@
     }
 </script>
 
-<style>
+<style scoped>
     .container {
         float: right;
     }

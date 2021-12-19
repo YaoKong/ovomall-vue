@@ -3,7 +3,16 @@
 
     <div class="column">
         <div class="leftcolumn">
-            <img src="../assets/图标/icon.jpg" class="round_icon" alt="">
+            <el-upload
+                    class="avatar-uploader"
+                    action="/uploadImg"
+                    :show-file-list="false"
+                    :on-success="handleAvatarSuccess"
+                    :before-upload="beforeAvatarUpload"
+            >
+                <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+                <el-icon v-else class="avatar-uploader-icon"><plus />点击上传头像</el-icon>
+            </el-upload>
         </div>
         <div class="rightcolumn">
             <fieldset class="fset">
@@ -31,8 +40,34 @@
 </template>
 
 <script>
+    import { Plus } from '@element-plus/icons-vue';
     export default {
-        name: "profile_change"
+        name: "profile_change",
+        data(){
+            return{
+                imageUrl: this.$store.state.userInfo.imgURL,
+            }
+        },
+        components:{
+            Plus,
+        },
+        methods:{
+            handleAvatarSuccess(res, file) {
+                this.imageUrl = URL.createObjectURL(file.raw)
+            },
+            beforeAvatarUpload(file) {
+                const isJPG = file.type === 'image/jpeg'
+                const isLt2M = file.size / 1024 / 1024 < 2
+
+                if (!isJPG) {
+                    this.$message.error('Avatar picture must be JPG format!')
+                }
+                if (!isLt2M) {
+                    this.$message.error('Avatar picture size can not exceed 2MB!')
+                }
+                return isJPG && isLt2M
+            },
+        },
     }
 </script>
 
@@ -146,5 +181,31 @@
         width:200px;
         border-radius:15px/15%;
         background:red;
+    }
+
+    .avatar-uploader .el-upload {
+        border: 1px dashed #d9d9d9;
+        border-radius: 6px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+    .avatar-uploader .el-upload:hover {
+        border-color: #409eff;
+    }
+    .avatar-uploader-icon {
+        font-size: 28px;
+        color: #8c939d;
+        width: 178px;
+        height: 178px;
+        text-align: center;
+    }
+    .avatar-uploader-icon svg {
+        margin-top: 74px; /* (178px - 28px) / 2 - 1px */
+    }
+    .avatar {
+        width: 178px;
+        height: 178px;
+        display: block;
     }
 </style>

@@ -5,6 +5,8 @@
         <el-tab-pane label="修改信息" name="third"> <aChange></aChange></el-tab-pane>
         <el-tab-pane label="售后服务" name="fourth"> <aSale></aSale> </el-tab-pane>
     </el-tabs>
+
+
 </template>
 
 <script>

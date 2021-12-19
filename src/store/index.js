@@ -5,10 +5,13 @@ export default createStore({
         isAuth: false,
         userInfo:{
             username: "",
+            id: 0,
+            sex: "保密",
             pwd: "",
-            checkPwd: "",
             email: "",
             tel: "",
+            imgURL: "",
+            balance: 0,
         },
     },
     getters:{

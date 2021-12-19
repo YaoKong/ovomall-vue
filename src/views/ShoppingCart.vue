@@ -1,7 +1,6 @@
 <template>
     <el-row >
         <el-col :span="2"><h2>购物车</h2><el-divider></el-divider></el-col>
-
     </el-row>
     <el-table ref="multipleTable" :data="tableData" style="width: 100%" @selection-change="handleSelectionChange">
             <el-table-column type="selection" label="全选" width="250" />
@@ -9,18 +8,20 @@
                 <template #default="scope">{{ scope.row.date }}</template>
             </el-table-column>
             <el-table-column property="price" label="单价" />
-            <el-table-column property="number" label="数量" show-overflow-tooltip ><el-input-number v-model="num" :min="1" @change="handleChange" /></el-table-column>
+            <el-table-column property="number" label="数量" show-overflow-tooltip >
+                <el-input-number v-model="num" :min="1" @change="handleChange" />
+            </el-table-column>
             <el-table-column property="amount" label="付款金额" show-overflow-tooltip />
             <el-table-column label="操作" show-overflow-tooltip ><el-button type="text">删除</el-button></el-table-column>
-
     </el-table>
 
     <el-row id = "operationRow">
         <el-col :span="2" ><el-button @click="toggleSelection()">取消全选</el-button></el-col>
-        <el-col :span="2" :offset="20" ><el-button @click="submitOrder()" id = "submitOrderButton">提交订单</el-button></el-col>
+            <el-col :span="2" :offset="20" >
+                <el-button @click="submitOrder()" id = "submitOrderButton">提交订单</el-button>
+            </el-col>
     </el-row>
-
-    </template>
+</template>
 
 <script>
     import {ref} from "@vue/reactivity";
@@ -55,7 +56,7 @@
                 this.multipleSelection = val
             },
             submitOrder(){
-
+                this.$router.push("/items");
             }
         },
         setup() {
@@ -73,7 +74,7 @@
 
 
 
-<style>
+<style scoped>
     #submitOrderButton{
         background-color: #F56C6C;
         color:white;

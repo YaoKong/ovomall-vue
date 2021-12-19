@@ -40,7 +40,22 @@ const router = createRouter({
                 requireAuth: true
             }
         },
-
+        {
+            path: '/items',
+            name: 'item',
+            component: () => import(/* webpackChunkName: "login" */ './views/ItemPage.vue'),
+            meta: {
+                requireAuth: true
+            }
+        },
+        {
+            path: '/searchResult',
+            name: 'search',
+            component: () => import(/* webpackChunkName: "login" */ './views/SearchResult.vue'),
+            meta: {
+                requireAuth: false
+            }
+        },
     ]
 })
 
