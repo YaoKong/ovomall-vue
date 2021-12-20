@@ -28,9 +28,13 @@
         </el-col>
         <el-col :span="15" :offset="1" id="carousel">
         <el-carousel indicator-position="outside" >
+
             <el-carousel-item v-for="item in (goodsTable.slice(0,4))" :key="item" id="max">
-                <img :src=item.imgURL alt="" class="carouselImg">
+                <router-link :to="{name:'goodsPage', query: item}">
+                    <img :src=item.imgURL alt="" class="carouselImg">
+                </router-link>
             </el-carousel-item>
+
         </el-carousel>
         </el-col>
     </el-row>
