@@ -110,13 +110,13 @@
                 registerForm: {username: "", pwd: "", checkPwd: "", email: "", tel: ""},
                 info: null,
                 user: null,
-
+                recAddress: [],
             }
         },
         methods: {
             toRegister: function () {
-                var strFrom = JSON.stringify(this.registerForm);
-                var jsonForm = JSON.parse(strFrom);
+                // var strFrom = JSON.stringify(this.registerForm);
+                // var jsonForm = JSON.parse(strFrom);
 
                 if (this.registerForm.username == "") {
                     alert("用户名为空！");
@@ -125,7 +125,10 @@
                 } else if (this.registerForm.checkPwd == "") {
                     alert("确认密码为空！");
                 } else {
-                    axios.post("/regiser", jsonForm)
+                    axios.post("http://localhost:8088/buyer/register", {
+                        username: this.loginForm.username,
+                        password: this.loginForm.pwd,
+                    })
                         .then(response => (this.info = response))
                         .catch(function (error) {
                             console.log(error);
@@ -140,58 +143,64 @@
                 }
             },
             toLogin: function () {
-                var strFrom = JSON.stringify(this.loginForm);
-                var jsonForm = JSON.parse(strFrom);
+                // var strFrom = JSON.stringify(this.loginForm);
+                // var jsonForm = JSON.parse(strFrom);
 
                 if (this.loginForm.username == "" || this.loginForm.pwd == "") {
                     alert("用户名或密码为空！");
                 } else {
-                    // axios.post("/login", jsonForm)
-                    //     .then(response => (this.info = response))
-                    //     .catch(function (error) {
-                    //         console.log(error);
-                    //     });
+                    axios.post("http://localhost:8005/buyer/login", {
+                        username: this.loginForm.username,
+                        password: this.loginForm.pwd,
+                    }).then(response => (this.info = response.data.data))
+                        .catch(function (error) {
+                            console.log(error);
+                        });
 
                     //处理响应
-                    // if(this.info == "200"){ //登录成功
-                    if(true){ //测试代码
+                    if(this.info.status == "1"){ //
                         this.$store.dispatch("userLogin", true);    //设置登录标志位true
-
                         localStorage.setItem("Auth","yes"); //设置item名为Auth，值为yes
+                        // var uuser = {
+                        //     username: this.loginForm.username,
+                        //     pwd: this.loginForm.pwd,
+                        //     email: "asfasf@qq.com",
+                        //     tel: "10086",
+                        //     sex: "男",
+                        //     id: 100,
+                        //     imgURL: "../assets/图标/lenovo1.jpg",
+                        //     revAddress: ["翻斗花园","朝阳路123号"],
+                        //     balance: 100,
+                        // };
 
-                        // axios.post("/findUser", jsonForm)   //根据用户名和密码查找用户，响应包含用户的全部信息json对象
-                        //     .then(response => (this.user = JSON.parse(response.data)))
-                        //     .catch(function (error) {
-                        //         console.log(error);
-                        //     });
-
-                        var uuser = {
+                        axios.post("http://localhost:8005/buyer/address/query", {
                             username: this.loginForm.username,
-                            pwd: this.loginForm.pwd,
-                            email: "asfasf@qq.com",
-                            tel: "10086",
-                            sex: "男",
-                            id: 100,
-                            imgURL: "../assets/图标/lenovo1.jpg",
-                            balance: 100,
-                        };
+                            password: this.loginForm.pwd,
+                        }).then(response => (this.recAddress = response.data.data))
+                            .catch(function (error) {
+                                console.log(error);
+                            });
 
-                        this.$store.dispatch("createUser", uuser );
-
-
+                        this.$store.dispatch("createUser", {
+                            username: this.info.username,
+                            id: this.info.id,
+                            sex: this.info.sex,
+                            pwd: this.info.password,
+                            email: this.info.email,
+                            tel: this.info.phone,
+                            imgURL: this.info.imgURL,
+                            revAddress: this.revAddress,
+                            balance: this.info.balance,
+                        });
                         //提示登录成功，正在跳转
                         alert("登录成功，即将跳转");
                         this.$router.push("/home");
-                        // location.reload();
                     }
                     else{   //登录失败
                         alert("登录失败，请稍后再试");
                     }
                 }
             }
-        },
-        beforeCreate() {
-
         },
     }
 </script>

@@ -13,8 +13,8 @@
                         {{this.$route.query.price}}
                     </el-form-item>
                     <el-form-item label="型号">
-                        <el-radio-group v-model="radio1" fill="#F56C6C">
-                            <el-radio-button :label=this.$route.query.modelNum ></el-radio-button>
+                        <el-radio-group v-model="radio" fill="#F56C6C">
+                            <el-radio-button :label=this.$route.query.modelNum></el-radio-button>
                         </el-radio-group>
                     </el-form-item>
                     <el-form-item label="购买数量">
@@ -65,37 +65,56 @@
                     payment: 0,
                 },
                 remarkText:"",
+                radio:null,
             }
         },
         methods: {
             buyGoods() {
-                this.goodsForm.payment = this.goodsForm.amount * this.$store.state.userInfo.price;
-                this.$router.push({
-                    name:'item',
-                    query: {
-                        value:this.goodsForm,
-                        isCart: false,
-                    }});
+                if(this.radio != null){
+                    this.goodsForm.payment = this.goodsForm.amount * this.goodsForm.price;
+                    this.$router.push({
+                        name:'item',
+                        query: {
+                            value:JSON.stringify([this.goodsForm]),
+                        }});
+                }
+                else{
+                    this.goodsForm.payment = this.goodsForm.amount * this.goodsForm.price;
+                    this.$store.dispatch("addCart", this.goodsForm);
+                    ElMessage({
+                        message: '请先选择型号!',
+                        type: 'error',
+                    });
+                }
             },
             addCart() {
-                this.goodsForm.payment = this.goodsForm.amount * this.goodsForm.price;
-                this.$store.dispatch("addCart", this.goodsForm);
-                ElMessage({
-                    message: '成功加入购物车!',
-                    type: 'success',
-                });
+                if(this.radio != null){
+                    ElMessage({
+                        message: '成功加入购物车!',
+                        type: 'success',
+                    });
+                }
+                else{
+                    this.goodsForm.payment = this.goodsForm.amount * this.goodsForm.price;
+                    this.$store.dispatch("addCart", this.goodsForm);
+                    ElMessage({
+                        message: '请先选择型号!',
+                        type: 'error',
+                    });
+                }
+
             },
             remarkGoods() {
+
                 ElMessage({
-                    message: '提交成功，审核后显示!',
+                    // message: '提交成功，审核后显示!',
+                    message: this.$route.query,
                     type: 'success',
                 });
             },
         },
         setup() {
-            return {
-                radio1: ref(true),
-            }
+
         },
     }
 </script>

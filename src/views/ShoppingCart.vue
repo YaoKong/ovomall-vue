@@ -65,12 +65,12 @@
                 this.multipleSelection = val
             },
             submitOrder(){
-                if(this.$store.state.isAuth){
-                    this.$router.push({
+                if(this.$store.state.isAuth ){
+                    if(this.multipleSelection.length > 0)
+                        this.$router.push({
                         path:"/items",
                         query: {
-                            value : this.multipleSelection,
-                            isCart: true
+                            value : JSON.stringify(this.multipleSelection),
                         }
                     });
                 }
