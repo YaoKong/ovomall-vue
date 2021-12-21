@@ -79,8 +79,6 @@
                         }});
                 }
                 else{
-                    this.goodsForm.payment = this.goodsForm.amount * this.goodsForm.price;
-                    this.$store.dispatch("addCart", this.goodsForm);
                     ElMessage({
                         message: '请先选择型号!',
                         type: 'error',
@@ -89,14 +87,14 @@
             },
             addCart() {
                 if(this.radio != null){
+                    this.goodsForm.payment = this.goodsForm.amount * this.goodsForm.price;
+                    this.$store.dispatch("addCart", this.goodsForm);
                     ElMessage({
                         message: '成功加入购物车!',
                         type: 'success',
                     });
                 }
                 else{
-                    this.goodsForm.payment = this.goodsForm.amount * this.goodsForm.price;
-                    this.$store.dispatch("addCart", this.goodsForm);
                     ElMessage({
                         message: '请先选择型号!',
                         type: 'error',

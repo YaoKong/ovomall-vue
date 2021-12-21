@@ -39,7 +39,7 @@
                 </tr>
                 <tr>
                     <td>余额：</td>
-                    <td>{{this.$store.state.userInfo.balance}}</td>
+                    <td>{{this.$store.state.userInfo.balance}} <button>充值</button></td>
                 </tr>
             </table>
         </div>

@@ -8,7 +8,8 @@
 
 
 #### 安装教程
-
+1.  安装node.js，npm, cnpm
+2.  cd至项目根目录
 1.  cnpm install
 
 
