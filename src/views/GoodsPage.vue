@@ -13,12 +13,12 @@
                         {{this.$route.query.price}}
                     </el-form-item>
                     <el-form-item label="型号">
-                        <el-radio-group v-model="radio1">
-                            <el-radio-button :label=this.$route.query.modelNum></el-radio-button>
+                        <el-radio-group v-model="radio1" fill="#F56C6C">
+                            <el-radio-button :label=this.$route.query.modelNum ></el-radio-button>
                         </el-radio-group>
                     </el-form-item>
                     <el-form-item label="购买数量">
-                        <el-input-number v-model=goodsForm.amount :min="1" :max="999" @change="handleChange" />
+                        <el-input-number v-model=goodsForm.amount :min="1" :max="999" />
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="buyGoods" color="#F56C6C" style="color: white" >立即购买</el-button>
@@ -34,13 +34,13 @@
                 </el-tab-pane>
                 <el-tab-pane label="评价">
                     <el-input
-                            v-model="textarea2"
+                            v-model="remarkText"
                             :autosize="{ minRows: 2, maxRows: 10 }"
                             type="textarea"
                             placeholder="请输入评价"
                     >
                     </el-input>
-                    <el-button @click="remarkGoods">发表评价</el-button>
+                    <el-button v-model="remarkText" @click="remarkGoods">发表评价</el-button>
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -55,35 +55,46 @@
         name: "GoodsPage",
         data() {
             return {
-                imgURL: "https://p1.lefile.cn/product/adminweb/2021/10/18/gLnPEamlCPvOn2qwrWbCmPQuH-6143.w520.jpg",
                 goodsForm: {
                     goodsName: this.$route.query.goodsName,
+                    price: this.$route.query.price,
+                    goodsImg: this.$route.query.imgURL,
                     goodsID: this.$route.query.goodsID,
                     userID: this.$store.state.userInfo.id,
                     amount: 1,
                     payment: 0,
                 },
+                remarkText:"",
             }
         },
         methods: {
             buyGoods() {
                 this.goodsForm.payment = this.goodsForm.amount * this.$store.state.userInfo.price;
-                this.$router.push({name:'item',query: this.goodsForm });
+                this.$router.push({
+                    name:'item',
+                    query: {
+                        value:this.goodsForm,
+                        isCart: false,
+                    }});
             },
             addCart() {
-                this.goodsForm.payment = this.goodsForm.amount * this.$store.state.userInfo.price;
-                ElMessage('成功加入购物车!');
+                this.goodsForm.payment = this.goodsForm.amount * this.goodsForm.price;
+                this.$store.dispatch("addCart", this.goodsForm);
+                ElMessage({
+                    message: '成功加入购物车!',
+                    type: 'success',
+                });
             },
             remarkGoods() {
-                console.log('submit!')
+                ElMessage({
+                    message: '提交成功，审核后显示!',
+                    type: 'success',
+                });
             },
         },
         setup() {
-            const handleChange = (value) => {
-                console.log(value)
-            }
             return {
-                handleChange,
+                radio1: ref(true),
             }
         },
     }

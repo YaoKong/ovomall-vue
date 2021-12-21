@@ -82,7 +82,8 @@
                     rows.forEach((row) => {
                         this.$refs.multipleTable.toggleRowSelection(row)
                     })
-                } else {
+                }
+                else {
                     this.$refs.multipleTable.clearSelection()
                 }
             },

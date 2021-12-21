@@ -43,12 +43,11 @@
     <div class="rec">
         <span class="recommended">推荐商品</span>
 
-        <div class="c" >
-            <a href="https://www.iconfont.cn/collections/index?spm=a313x.7781069.1998910419.5&type=1" target="_blank"
-               v-for="(item, index) in goodsTable">
+        <div class="c" v-for="(item, index) in goodsTable">
+                <router-link :to="{name:'goodsPage', query: item}">
                 <img  v-if="index === 0" class="try" width="410" height="410" :src=item.imgURL alt="">
                 <img v-else class="try2" width="200" height="200" :src= item.imgURL alt="">
-            </a>
+                </router-link>
         </div>
     </div>
 </template>

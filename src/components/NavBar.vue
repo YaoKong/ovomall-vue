@@ -40,7 +40,7 @@
             <el-col :span="2" >
                 <router-link to="/shoppingCart">
                 <el-menu-item  index="3" >
-                    <img src="../assets/shoppingcart.png" alt="sada" height="20" weight="25">购物车(0)
+                    <img src="../assets/shoppingcart.png" alt="sada" height="20" weight="25">购物车({{this.$store.state.cartList.length}})
                 </el-menu-item >
                 </router-link>
             </el-col>

@@ -35,7 +35,7 @@ export default createStore({
             state.userInfo = payload;
         },
         cartStatus(state, payload){
-            state.cartList.push(payload);
+            state.cartList = payload;
         },
     },
     actions:{
@@ -45,8 +45,31 @@ export default createStore({
         createUser({commit}, payload){
             commit('userStatus', payload);
         },
-        addCart({commit}, payload){
-            commit('cartStatus', payload);
+        addCart({commit,state}, payload){
+            // commit('cartStatus',state.cartList.concat(payload));
+            var i;
+            for(i = 0; i < state.cartList.length; i++){
+                if(state.cartList[i].goodsID == payload.goodsID) {
+                    state.cartList[i].amount += payload.amount;
+                    state.cartList[i].payment += payload.payment;
+                    break;
+                }
+            }
+            if(i >= state.cartList.length) state.cartList.push(payload);
+        },
+        deleteCart({commit,state}, payload){
+
+            var newlist = [];
+            var i;
+            var j = -1;
+            for(i = 0; i < state.cartList.length; i++){
+                if(j == -1 && state.cartList[i] == payload) {
+                    j = i;
+                    continue;
+                }
+                newlist.push(state.cartList[i]);
+            }
+            commit('cartStatus', newlist);
         },
     },
     modules: {
