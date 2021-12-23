@@ -18,7 +18,8 @@
         },
         methods:{
             searchFor(){
-                this.$router.push("/searchResult");
+                this.$router.push({path:"/searchResult",
+                    params:{ inputValue: this.inputValue }});
             }
         }
     }

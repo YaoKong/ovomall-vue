@@ -21,7 +21,7 @@
                     <p>原始密码：<input type="password" name="oldpassword" class="oldpassword"></p>
                     <p class="p1">新密码：<input type="password" name="newpassword" class="newpassword"></p>
                     <p>确认密码：<input type="password" name="repassword" class="repassword"></p>
-                    <p> <input type="submit" name="submit" value="更改密码" class="changepassword"></p>
+                    <p> <input type="submit" name="submit" value="更改密码" class="changepassword" @click="changePwd"></p>
                 </form>
             </fieldset>
         </div>
@@ -29,7 +29,7 @@
 
     <fieldset class="fset2">
         <span class="chara2">修改信息</span>
-        <span><input type="submit" name="submit" value="保存信息" class="save"></span>
+        <span><input type="submit" name="submit" value="保存信息" class="save" @click="changeUserInfo"></span>
         <form name="form" method="post" action="#">
             <p>用户名：<input type="text" name="name" class="name"></p>
             <p class="p1">性别：<input type="password" name="newpassword" class="newpassword"></p>
@@ -41,11 +41,24 @@
 
 <script>
     import { Plus } from '@element-plus/icons-vue';
+    import {ElMessage} from "element-plus";
     export default {
         name: "profile_change",
         data(){
             return{
                 imageUrl: this.$store.state.userInfo.imgURL,
+                passwordForm:{
+                    rawPwd:"",
+                    newPwd:"",
+                    checkPwd:"",
+                },
+                infoForm:{
+                    username:"",    //用户名
+                    email:"",   //邮箱
+                    phone:"",   //手机号
+                    sex:"", //性别
+                },
+                recAddress:[],
             }
         },
         components:{
@@ -66,6 +79,85 @@
                     this.$message.error('Avatar picture size can not exceed 2MB!')
                 }
                 return isJPG && isLt2M
+            },
+            changePwd(){
+
+                if(this.passwordForm.newPwd == this.passwordForm.checkPwd)
+                this.axios.post("http://localhost:8005/buyer/reset_password", {
+                    password: this.passwordForm.rawPwd,
+                    newPassword: this.passwordForm.newPwd,
+                }).then(response => {
+                    if(response.data.status == "0"){
+                        ElMessage({
+                            message: "修改成功",
+                            type: 'success',
+                        });
+                    }
+                    else{
+                        ElMessage({
+                            message: "修改失败，稍后再试",
+                            type: 'error',
+                        });
+                }})
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+                else{
+                    ElMessage({
+                        message: "两次输入的新密码不一致",
+                        type: 'error',
+                    });
+                }
+            },
+            changeUserInfo(){
+                this.axios.post("http://localhost:8005/buyer/update_information", {
+                    realname: this.infoForm.username,
+                    email: this.infoForm.email,
+                    phone: this.infoForm.phone,
+                    sex: this.infoForm.sex,
+                }).then(response => {
+                    if(response.data.status == "0"){
+                        ElMessage({
+                            message: "修改成功",
+                            type: 'success',
+                        });
+                    }
+                    else{
+                        ElMessage({
+                            message: "修改失败，稍后再试",
+                            type: 'error',
+                        });
+                    }})
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+
+                //更新个人信息
+                this.axios.post("http://localhost:8005/buyer/address/list", {
+                    username: this.loginForm.username,
+                    password: this.loginForm.pwd,
+                }).then(response => (this.recAddress = response.data.data.filter(address => address.userId == this.info.id)))
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+
+                this.axios.get("http://localhost:8005/buyer/get_information",).then(response => {
+                    if(response.data.status == "0"){
+                        this.$store.dispatch("createUser", {
+                            username: response.data.username,
+                            id: response.data.id,
+                            sex: response.data.sex,
+                            pwd: response.data.password,
+                            email: response.data.email,
+                            tel: response.data.phone,
+                            imgURL: response.data.imgURL,
+                            revAddress: this.revAddress,
+                            balance: response.data.balance,
+                        });
+                    }})
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             },
         },
     }

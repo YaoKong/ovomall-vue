@@ -5,7 +5,8 @@ import App from './App.vue'
 import router from './routers'
 import store from './store'
 import Cookies from 'js-cookie';
-
+import axios from 'axios'
+import VueAxios from 'vue-axios'
 
 
 const app = createApp(App)
@@ -31,20 +32,8 @@ router.beforeEach((to,from, next) =>{
         }
     }
 })
+app.use(VueAxios, axios)
 app.use(Cookies)
-// var uuser = {
-//     username: "ss",
-//     pwd: 123,
-//     email: "asfasf@qq.com",
-//     tel: "10086",
-//     sex: "男",
-//     id: 100,
-//     balance: 100,
-// };
-// Cookies.set('userInfo', JSON.stringify(uuser),{expires :7});
-// console.log( "Cookies.get")
-// console.log( Cookies.get("userInfo"))
-
 app.use(store)
 app.use(ElementPlus)
 app.use(router)

@@ -64,6 +64,14 @@ const router = createRouter({
                 requireAuth: false
             }
         },
+        {
+            path: '/ServiceCenter',
+            name: 'serviceCenter',
+            component: () => import(/* webpackChunkName: "login" */ './views/ServiceCenter.vue'),
+            meta: {
+                requireAuth: false
+            }
+        },
     ]
 })
 

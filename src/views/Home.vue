@@ -1,40 +1,13 @@
 <template>
     <Search></Search>
     <el-row class="table">
-        <el-col :span="2">
-<!--            <el-menu-->
-<!--                    default-active="2"-->
-<!--                    class="el-menu-vertical-demo"-->
-<!--                    @open="handleOpen"-->
-<!--                    @close="handleClose"-->
-<!--            >-->
-<!--                <el-menu-item index="1" :offset="1">-->
-<!--                    <el-icon><setting /></el-icon>-->
-<!--                    <span>系列1</span>-->
-<!--                </el-menu-item>-->
-<!--                <el-menu-item index="2">-->
-<!--                    <el-icon><icon-menu /></el-icon>-->
-<!--                    <span>系列1</span>-->
-<!--                </el-menu-item>-->
-<!--                <el-menu-item index="3">-->
-<!--                    <el-icon><document /></el-icon>-->
-<!--                    <span>系列1</span>-->
-<!--                </el-menu-item>-->
-<!--                <el-menu-item index="4">-->
-<!--                    <el-icon><setting /></el-icon>-->
-<!--                    <span>系列1</span>-->
-<!--                </el-menu-item>-->
-<!--            </el-menu>-->
-        </el-col>
-        <el-col :span="15" :offset="1" id="carousel">
+        <el-col :span="16" :offset="4" id="carousel">
         <el-carousel indicator-position="outside" >
-
             <el-carousel-item v-for="item in (goodsTable.slice(0,4))" :key="item" id="max">
                 <router-link :to="{name:'goodsPage', query: item}">
                     <img :src=item.imgURL alt="" class="carouselImg">
                 </router-link>
             </el-carousel-item>
-
         </el-carousel>
         </el-col>
     </el-row>

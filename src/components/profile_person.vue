@@ -13,7 +13,7 @@
     <div class="column">
 
         <div class="leftcolumn">
-            <img src="../assets/图标/icon.jpg" class="round_icon" alt="">
+            <img :src=this.$store.state.userInfo.imgURL class="round_icon" alt="">
         </div>
         <div class="rightcolumn">
             <table class="table1">
@@ -39,7 +39,8 @@
                 </tr>
                 <tr>
                     <td>余额：</td>
-                    <td>{{this.$store.state.userInfo.balance}} <button>充值</button></td>
+                    <td>{{this.$store.state.userInfo.balance}} 元 <el-button type="text" @click="dialogVisible = true">充值</el-button>
+                    </td>
                 </tr>
             </table>
         </div>
@@ -50,19 +51,19 @@
             <span class="font1">新建地址</span>
             <table width="600" cellspacing="8" frame="box" class="table2">
                     <tr>
-                        <td align="left">收货人:<input type="text" class="t1" placeholder="请输入姓名" /></td>
+                        <td align="left">收货人:<input type="text" class="t1" placeholder="请输入姓名" v-model="newAddress.name"/></td>
                     </tr>
                     <tr >
-                        <td align="left" >手机号: <input type="text" class="t2" placeholder="请输入手机号" /></td>
+                        <td align="left" >手机号: <input type="text" class="t2" placeholder="请输入手机号" v-model="newAddress.mobile"/></td>
                     </tr>
                     <tr >
-                        <td align="left" >邮  编: <input type="text" class="t3" placeholder="请输入邮政编码" /></td>
+                        <td align="left" >邮  编: <input type="text" class="t3" placeholder="请输入邮政编码" v-model="newAddress.postcode"/></td>
                     </tr>
                     <tr >
-                        <td align="left" >地  址: <input type="text" class="t3" placeholder="请输入您的地址" /></td>
+                        <td align="left" >地  址: <input type="text" class="t3" placeholder="请输入您的地址" v-model="newAddress.city" /></td>
                     </tr>
                     <tr>
-                        <td> <button class="submit" type="submit">新建</button><button class="reset" type="reset">重置</button></td>
+                        <td> <button class="submit" type="submit" @click="addAddress">新建</button><button class="reset" type="reset">重置</button></td>
                     </tr>
             </table>
         </div>
@@ -70,7 +71,7 @@
         <div class="rightfooter">
             <table width="300" cellspacing="8" frame="box" class="table3">
                     <tr>
-                        <td align="left">收货人:</td>
+                        <td align="left" >收货人:</td>
                     </tr>
                     <tr >
                         <td align="left" >手机号:</td>
@@ -79,7 +80,7 @@
                         <td align="left" >邮  编: </td>
                     </tr>
                     <tr >
-                        <td align="left" >地  址:</td>
+                        <td align="left"  >地  址:</td>
                     </tr>
                     <tr>
                         <td> <button class="submit1" >修改</button><button class="reset1" >删除</button></td>
@@ -87,11 +88,124 @@
             </table>
         </div>
     </div>
+
+    <el-dialog
+            v-model="dialogVisible"
+            title="充值"
+            width="30%"
+
+    >
+        <el-input v-model="chargeVal" placeholder="请输入充值金额(元)" />
+        <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="handleCharge = false">确认</el-button>
+      </span>
+        </template>
+    </el-dialog>
 </template>
 
 <script>
+    import {ElMessage, ElMessageBox} from "element-plus";
+    import {ref} from "@vue/reactivity";
+
     export default {
-        name: "profile_person"
+        name: "profile_person",
+        data(){
+            return{
+                chargeVal: null,
+                response: null,
+                newAddress:{
+                    userId: this.$store.state.userInfo.id ,
+                    name: "",
+                    phone:"",
+                    mobile:"",
+                    province:"",
+                    city:"",
+                    district:"",
+                    street:"",
+                    postcode:"",
+                },
+                addressList:this.$store.state.userInfo.revAddress,
+                recAddress: [],
+            }
+        },
+        methods:{
+            handleCharge(){
+                this.axios.post("http://localhost:8005/buyer/charge", {
+                    id: this.$store.userInfo.id,
+                    chargeVal: this.chargeVal,
+                })
+                    .then(response => (this.response = response))
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+
+                if(this.response.data.data.status == "0"){
+                    this.$store.userInfo.balance = this.response.data.data.balance;
+                }
+                else{
+                    ElMessage({
+                        message: "充值失败，稍后再试",
+                        type: 'error',
+                    });
+                }
+
+            },
+            addAddress(){
+
+                this.axios.post("http://localhost:8005/buyer/address/add", this.newAddress)
+                    .then(response => (this.response = response))
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+
+                if(this.response.data.status == "0"){
+                    ElMessage({
+                        message: "添加成功",
+                        type: 'success',
+                    });
+                }
+                else{
+                    ElMessage({
+                        message: "充值失败，稍后再试",
+                        type: 'error',
+                    });
+                }
+            },
+        },
+        setup() {
+            const dialogVisible = ref(false)
+            //更新个人信息
+            this.axios.post("http://localhost:8005/buyer/address/list", {
+                username: this.loginForm.username,
+                password: this.loginForm.pwd,
+            }).then(response => (this.recAddress = response.data.data.filter(address => address.userId == this.info.id)))
+                .catch(function (error) {
+                    console.log(error);
+                });
+
+            this.axios.get("http://localhost:8005/buyer/get_information",).then(response => {
+                if(response.data.status == "0"){
+                    this.$store.dispatch("createUser", {
+                        username: response.data.username,
+                        id: response.data.id,
+                        sex: response.data.sex,
+                        pwd: response.data.password,
+                        email: response.data.email,
+                        tel: response.data.phone,
+                        imgURL: response.data.imgURL,
+                        revAddress: this.revAddress,
+                        balance: response.data.balance,
+                    });
+                }})
+                .catch(function (error) {
+                    console.log(error);
+                });
+            return {
+                dialogVisible,
+            }
+        },
     }
 </script>
 

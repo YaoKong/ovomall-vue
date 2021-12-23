@@ -10,7 +10,7 @@
         <el-radio>{{this.radio}}</el-radio>
         <table width="800" cellspacing="36" id = "addArr" >
                 <el-radio-group v-model="radio">
-                        <el-radio v-for= "item in this.$store.state.userInfo.revAddress" :label=item></el-radio>
+                        <el-radio v-for= "item in this.$store.state.userInfo.revAddress" :label=item.city></el-radio>
                 </el-radio-group>
         </table>
         <div>
@@ -66,11 +66,40 @@
         },
         methods:{
             submitOrder() {
-                ElMessage({
-                    // message: '提交成功，审核后显示!',
-                    message: JSON.parse(this.$route.query.value),
-                    type: 'success',
-                });
+                //添加到后端的购物车
+                for(var i = 0; i < this.tableData.length; i++){
+                    this.axios.post("http://localhost:8005/buyer/cart/add", {
+                        productId: this.tableData[i].goodsID,
+                        count: this.tableData[i].amount,
+                    }).catch(function (error) {
+                            console.log(error);
+                        });
+                }
+
+
+
+                //发送收货地址让后端生成订单
+                this.axios.post("http://localhost:8005/buyer/order/create", {
+                    addressId: this.radio.id
+                }).then(response => {
+                    if(response.data.status == '0'){
+                        ElMessage({
+                            message: "提交订单成功",
+                            type: 'success',
+                        });
+                        this.$router.push("/home"); //跳转回主页
+                    }
+                    else{
+                        ElMessage({
+                            message: "提交失败，稍后再试",
+                            type: 'error',
+                        });
+                    }
+                })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+
             },
         },
         computed:{

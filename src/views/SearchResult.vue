@@ -5,13 +5,14 @@
         <el-card :body-style="{ padding: '0px' }" class="cardBox"
         v-for="card in tableData">
             <img
-                    src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
+                    :src= card.imageHost
                     class="image"
+                    @click="enterGoodsPage(row)"
             />
             <div style="padding: 14px">
-                <span>商品名</span>
+                <span @click="enterGoodsPage(row)">{{card.name}}</span>
                 <div class="bottom">
-                    <el-button class="addGoods" type="primary" :icon="shopping-cart-full">加入购物车</el-button>
+                    <el-button @click="addCart(card)" class="addGoods" type="primary" :icon="shopping-cart-full">加入购物车</el-button>
                 </div>
             </div>
         </el-card>
@@ -20,36 +21,63 @@
 
 <script>
     import Search from "../components/Search.vue";
+    import {ElMessage} from "element-plus";
     export default {
         name: "SearchResult",
         data(){
             return {
                 tableData: [
                     {
-                        date: '2016-05-03',
-                        name: 'Tom',
-                        address: 'No. 189, Grove St, Los Angeles',
-                    },
-                    {
-                        date: '2016-05-02',
-                        name: 'Tom',
-                        address: 'No. 189, Grove St, Los Angeles',
-                    },
-                    {
-                        date: '2016-05-04',
-                        name: 'Tom',
-                        address: 'No. 189, Grove St, Los Angeles',
-                    },
-                    {
-                        date: '2016-05-01',
-                        name: 'Tom',
-                        address: 'No. 189, Grove St, Los Angeles',
+                        name: 'Tom',    //商品名 对应对应response的name
+                        imageHos: './xx.jpg', //商品图片 对应response的imageHost
+                        price:"1",  //单价 对应response的price
+                        id:"1", //商品id 对应response的id
+                        amount:1,   //购买数量
                     },
                 ],
             }
         },
         components:{
             Search,
+        },
+        methods:{
+            addCart(row) {
+                    this.goodsForm.payment = this.goodsForm.amount * this.goodsForm.price;
+                    this.$store.dispatch("addCart", {
+                        goodsName: row.name,
+                        price: row.price,
+                        goodsImg: row.imageHos,
+                        goodsID: row.id,
+                        userID: this.$store.state.userInfo.id,
+                        amount: 1,  //默认加入购物车一个
+                        payment: 0,
+                    });
+                    ElMessage({
+                        message: '成功加入购物车!',
+                        type: 'success',
+                    });
+            },
+            enterGoodsPage(row){
+                this.$router.push({path:"/goodsPage",
+                    params: {
+                        goodsName: row.name,    //商品名
+                        goodsID : row.id,
+                        modelNum : row.modelNum,    //型号
+                        imgURL : row.imageHos,   //图片地址
+                        price: row.price,  //价格(元）
+                        description: row.detail,  //商品描述,
+                        remarks: [],  //商品评价，保存用户的所有评价
+                    }});
+            },
+        },
+        setup(){
+            //根据关键字查询商品
+            this.axios.post("http://localhost:8005/buyer/product/search_product/categoryId_keyword", {
+                keyword: this.$route.query.inputValue,
+            }).then(response => (this.tableData = response.data.list))
+                .catch(function (error) {
+                    console.log(error);
+                });
         },
     }
 </script>

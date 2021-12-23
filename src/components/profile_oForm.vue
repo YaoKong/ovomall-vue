@@ -13,20 +13,33 @@
     </div>
 
     <div class="root">
-        <fieldset>
-            <img src="../assets/图标/icon.jpg" height="100px" width="100px" class="sp">
-            <span class="uprice2">100$</span>
-            <span class="quantity2">100$</span>
-            <span class="pay2">100$</span>
-            <span class="state2">100$</span>
-            <button class="evaluate">评价</button>
+        <fieldset :v-for="order in orderEntityVoList">
+<!--            <img src="../assets/图标/icon.jpg" height="100px" width="100px" class="sp">-->
+<!--            <span class="uprice2">{{order.price}}</span>-->
+<!--            <span class="quantity2">{{order.quantity}}</span>-->
+<!--            <span class="pay2">{{order.price * order.quantity}}</span>-->
+<!--            <span class="state2">待评价</span>-->
+<!--            <button class="evaluate">评价</button>-->
         </fieldset>
     </div>
 </template>
 
 <script>
+
     export default {
-        name: "profile_oForm"
+        name: "profile_oForm",
+        data(){
+            return{
+                orderEntityVoList: [],
+            }
+        },
+        setup() {
+            // this.axios.post("http://localhost:8005/buyer/address/order", {
+            // }).then(response => (this.orderEntityVoList = response.data.data.list))
+            //     .catch(function (error) {
+            //         console.log(error);
+            //     });
+        },
     }
 </script>
 

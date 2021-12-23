@@ -125,15 +125,15 @@
                 } else if (this.registerForm.checkPwd == "") {
                     alert("确认密码为空！");
                 } else {
-                    axios.post("http://localhost:8088/buyer/register", {
+                    this.axios.post("http://localhost:8005/buyer/register", {
                         username: this.loginForm.username,
                         password: this.loginForm.pwd,
                     })
-                        .then(response => (this.info = response))
+                        .then(response => (this.info = response.data))
                         .catch(function (error) {
                             console.log(error);
                         });
-                    if(this.info == "200"){
+                    if(this.info.status == "0"){
                         alert("注册成功，即将刷新");
                         location.reload();
                     }
@@ -149,16 +149,16 @@
                 if (this.loginForm.username == "" || this.loginForm.pwd == "") {
                     alert("用户名或密码为空！");
                 } else {
-                    axios.post("http://localhost:8005/buyer/login", {
+                    this.axios.post("http://localhost:8005/buyer/login", {
                         username: this.loginForm.username,
                         password: this.loginForm.pwd,
-                    }).then(response => (this.info = response.data.data))
+                    }).then(response => (this.info = response.data))
                         .catch(function (error) {
                             console.log(error);
                         });
 
                     //处理响应
-                    if(this.info.status == "1"){ //
+                    if(this.info.status == "0"){ //
                         this.$store.dispatch("userLogin", true);    //设置登录标志位true
                         localStorage.setItem("Auth","yes"); //设置item名为Auth，值为yes
                         // var uuser = {
@@ -172,25 +172,36 @@
                         //     revAddress: ["翻斗花园","朝阳路123号"],
                         //     balance: 100,
                         // };
+                        //获取个人信息
+                        // this.axios.post("http://localhost:8005/buyer/get_information")
+                        //     .then(response => {
+                        //         if(response.data.status == '0'){
+                        //
+                        //         }
+                        //     })
+                        //     .catch(function (error) {
+                        //         console.log(error);
+                        //     });
 
-                        axios.post("http://localhost:8005/buyer/address/query", {
+                        //获取收货地址
+                        this.axios.post("http://localhost:8005/buyer/address/list", {
                             username: this.loginForm.username,
                             password: this.loginForm.pwd,
-                        }).then(response => (this.recAddress = response.data.data))
+                        }).then(response => (this.recAddress = response.data.data.filter(address => address.userId == this.info.id)))
                             .catch(function (error) {
                                 console.log(error);
                             });
 
                         this.$store.dispatch("createUser", {
-                            username: this.info.username,
-                            id: this.info.id,
-                            sex: this.info.sex,
-                            pwd: this.info.password,
-                            email: this.info.email,
-                            tel: this.info.phone,
-                            imgURL: this.info.imgURL,
+                            username: this.info.data.username,
+                            id: this.info.data.id,
+                            sex: this.info.data.sex,
+                            pwd: this.info.data.password,
+                            email: this.info.data.email,
+                            tel: this.info.data.phone,
+                            imgURL: this.info.data.imgURL,
                             revAddress: this.revAddress,
-                            balance: this.info.balance,
+                            balance: this.info.data.balance,
                         });
                         //提示登录成功，正在跳转
                         alert("登录成功，即将跳转");

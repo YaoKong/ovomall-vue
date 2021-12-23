@@ -35,7 +35,9 @@
 
             </el-col>
             <el-col :span="2" >
+                <router-link to="/ServiceCenter">
             <el-menu-item index="4" id = "helper">客服中心</el-menu-item>
+                </router-link>
             </el-col>
             <el-col :span="2" >
                 <router-link to="/shoppingCart">
